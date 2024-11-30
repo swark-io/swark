@@ -46,7 +46,7 @@ It's important to note that source code is **only shared with GitHub Copilot**, 
 
 ## Installation
 
-Simply install Swark via the VS Code Extension Marketplace.
+Simply install Swark via the [VS Code Extension Marketplace](https://marketplace.visualstudio.com/items?itemName=swark.swark).
 
 ## How to Use
 
