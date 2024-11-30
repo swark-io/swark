@@ -1,0 +1,112 @@
+{
+    "name": "swark",
+    "displayName": "Swark",
+    "description": "AI-Powered Software Architect",
+    "version": "1.0.0",
+    "publisher": "swark",
+    "icon": "assets/logo/swark-icon.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/swark-io/swark"
+    },
+    "engines": {
+        "vscode": "^1.91.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "swark.architecture",
+                "title": "Swark: Create Architecture Diagram"
+            }
+        ],
+        "configuration": {
+            "title": "Swark",
+            "properties": {
+                "swark.maxFiles": {
+                    "type": "number",
+                    "default": 1000,
+                    "description": "Max number of files to read. The number of files read is also affected by the LLM max token limit."
+                },
+                "swark.fileExtensions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "py",
+                        "js",
+                        "jsx",
+                        "ts",
+                        "tsx",
+                        "mjs",
+                        "cjs",
+                        "c",
+                        "h",
+                        "cpp",
+                        "cc",
+                        "cxx",
+                        "hpp",
+                        "java",
+                        "cs",
+                        "go",
+                        "rb",
+                        "php",
+                        "rs",
+                        "scala",
+                        "swift",
+                        "kt",
+                        "kts"
+                    ],
+                    "description": "List of file extensions to include in search."
+                },
+                "swark.excludePatterns": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "**/.*",
+                        "**/.*/*",
+                        "**/node_modules/**"
+                    ],
+                    "description": "List of glob patterns to exclude from file search."
+                }
+            }
+        },
+        "keybindings": [
+            {
+                "command": "swark.architecture",
+                "key": "ctrl+shift+r",
+                "mac": "cmd+shift+r",
+                "when": "editorTextFocus"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "vscode-test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.7",
+        "@types/node": "20.x",
+        "@types/vscode": "^1.91.0",
+        "@typescript-eslint/eslint-plugin": "^7.14.1",
+        "@typescript-eslint/parser": "^7.11.0",
+        "@vscode/test-cli": "^0.0.9",
+        "@vscode/test-electron": "^2.4.0",
+        "eslint": "^8.57.0",
+        "typescript": "^5.4.5"
+    },
+    "dependencies": {
+        "@vscode/extension-telemetry": "^0.9.7"
+    }
+}
