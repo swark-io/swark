@@ -2,11 +2,11 @@
     "name": "swark",
     "displayName": "Swark",
     "description": "AI-Powered Software Architect",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "swark",
     "icon": "assets/logo/swark-icon.png",
     "license": "SEE LICENSE IN LICENSE",
-    "homepage": "https://swark.io/",
+    "homepage": "https://swark.io",
     "bugs": {
         "url": "https://github.com/swark-io/swark/issues",
         "email": "contact@swark.io"
