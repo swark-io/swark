@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
 function registerCommand(context: vscode.ExtensionContext): void {
     const disposable = vscode.commands.registerCommand("swark.architecture", async () => {
-        CreateArchitectureCommand.run();
+        await CreateArchitectureCommand.run();
     });
 
     context.subscriptions.push(disposable);
