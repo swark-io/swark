@@ -9,12 +9,18 @@
 
 <p align="center">
   <b>Automatic Architecture Diagrams from Code</b> <br />
-  </b>Powered by LLMs</b> <br />
+  </b>Powered by LLMs</b>
+</p>
+
+<p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=swark.swark"> 
+    <img src="https://img.shields.io/visual-studio-marketplace/v/swark.swark"/>
+  </a>
 </p>
 
 ## Swark
 
-Swark is a VS Code extension that allows creating architecture diagrams from code, automatically, using LLMs.\
+Swark is a VS Code extension that allows creating architecture diagrams from code automatically using large language models (LLMs).\
 Swark is **directly integrated with GitHub Copilot**, and requires no authentication or API key.
 
 <h1 align="center">
