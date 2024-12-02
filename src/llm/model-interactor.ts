@@ -6,7 +6,9 @@ export class ModelInteractor {
         const models = await vscode.lm.selectChatModels({ family: "gpt-4o" });
 
         if (models.length === 0) {
-            throw new Error("No language models available");
+            throw new Error(
+                "No language models available. This may occur if there is no active GitHub Copilot subscription."
+            );
         }
 
         const [model] = models;
