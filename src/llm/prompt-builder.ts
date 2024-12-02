@@ -23,7 +23,7 @@ export class PromptBuilder {
             5. The architecture should be high-level and not too detailed.
     
             The code files are given in the following format: full path, newline, file content. 
-            Different files will be seperated with '${PromptBuilder.FILE_SEPERATOR}'.\n`
+            Different files will be separated with '${PromptBuilder.FILE_SEPERATOR}'.\n`
         );
     }
 
