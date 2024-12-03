@@ -84,6 +84,34 @@
                         "**/node_modules/**"
                     ],
                     "description": "List of glob patterns to exclude from file search."
+                },
+                "swark.languageModel": {
+                    "type": "string",
+                    "markdownDescription": "Select a language model from the list of supported models. Set 'Language Model Custom' to override this selection.",
+                    "default": "gpt-4o",
+                    "enumDescriptions": [
+                        "GPT-4 Optimized - Default model",
+                        "GPT-4 Optimized Mini - Faster, lighter version",
+                        "Claude O1 Preview",
+                        "Claude O1 Mini",
+                        "Claude 3.5 Sonnet",
+                        "Gemini 1.5 Pro"
+                    ],
+                    "enum": [
+                        "gpt-4o",
+                        "gpt-4o-mini",
+                        "o1-preview",
+                        "o1-mini",
+                        "claude-3.5-sonnet",
+                        "gemini-1.5-pro"
+                    ]
+                },
+                "swark.languageModelCustom": {
+                    "type": "string",
+                    "markdownDescription": "Specify a custom language model family. If set, this overrides the 'Language Model' setting. Leave empty to use the selected model from the dropdown.",
+                    "pattern": "^[a-zA-Z0-9-._]*$",
+                    "patternErrorMessage": "Model family name can only contain letters, numbers, hyphens, dots, and underscores",
+                    "default": ""
                 }
             }
         },
