@@ -4,7 +4,11 @@ import { telemetry } from "../telemetry";
 export class ModelInteractor {
     public static async getModel(): Promise<vscode.LanguageModelChat> {
         const config = vscode.workspace.getConfiguration('swark');
-        const modelFamily = config.get<string>('languageModelFamily') || 'gpt-4o';
+        const customModel = config.get<string>('languageModelCustom');
+        const selectedModel = config.get<string>('languageModel') || 'gpt-4o';
+        
+        // Use custom model if specified, otherwise use the selected model from dropdown
+        const modelFamily = customModel || selectedModel;
         
         const models = await vscode.lm.selectChatModels({ family: modelFamily });
 
