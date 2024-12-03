@@ -41,6 +41,19 @@
                     "default": 1000,
                     "description": "Max number of files to read. The number of files read is also affected by the LLM max token limit."
                 },
+                "swark.languageModelFamily": {
+                    "type": "string",
+                    "enum": [
+                        "gpt-4o",
+                        "gpt-4o-mini",
+                        "o1-preview",
+                        "o1-mini",
+                        "claude-3.5-sonnet",
+                        "gemini-1.5-pro"
+                    ],
+                    "default": "gpt-4o",
+                    "description": "The language model to use for AI operations. Requires VS Code restart to take effect."
+                },
                 "swark.fileExtensions": {
                     "type": "array",
                     "items": {
