@@ -84,6 +84,19 @@
                         "**/node_modules/**"
                     ],
                     "description": "List of glob patterns to exclude from file search."
+                },
+                "swark.languageModel": {
+                    "type": "string",
+                    "markdownDescription": "Language model to use for diagram generation.",
+                    "default": "gpt-4o",
+                    "enum": [
+                        "gpt-4o",
+                        "gpt-4o-mini",
+                        "o1-preview",
+                        "o1-mini",
+                        "claude-3.5-sonnet",
+                        "gemini-1.5-pro"
+                    ]
                 }
             }
         },

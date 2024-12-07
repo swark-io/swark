@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=swark.swark" style="text-decoration: none;"> 
+  <a href="https://marketplace.visualstudio.com/items?itemName=swark.swark"> 
     <img src="https://img.shields.io/visual-studio-marketplace/v/swark.swark?label=Visual%20Studio%20Marketplace"/>
   </a>
   <a href="https://github.com/swark-io/swark/issues"> 
@@ -78,6 +78,7 @@ This extension contributes the following settings:
 | `swark.maxFiles`        | Max number of files to read.<br>The number of files read is also affected by the LLM max token limit.                                    |
 | `swark.fileExtensions`  | List of file extensions to include in search.                                                                                            |
 | `swark.excludePatterns` | List of glob patterns to exclude from file search.<br>Defaults include: `**/.*` for hidden files, `**/node_modules/**` for node modules. |
+| `swark.languageModel`   | Language model to use for diagram generation.                                                                                            |
 
 ## Known Issues
 
