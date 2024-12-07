@@ -78,7 +78,7 @@ This extension contributes the following settings:
 | `swark.maxFiles`        | Max number of files to read.<br>The number of files read is also affected by the LLM max token limit.                                    |
 | `swark.fileExtensions`  | List of file extensions to include in search.                                                                                            |
 | `swark.excludePatterns` | List of glob patterns to exclude from file search.<br>Defaults include: `**/.*` for hidden files, `**/node_modules/**` for node modules. |
-| `swark.languageModel`   | Language model to use for generating the diagram.                                                                                        |
+| `swark.languageModel`   | Language model to use for diagram generation.                                                                                            |
 
 ## Known Issues
 
