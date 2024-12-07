@@ -3,23 +3,19 @@ import { telemetry } from "../telemetry";
 
 export class ModelInteractor {
     public static async getModel(): Promise<vscode.LanguageModelChat> {
-        const config = vscode.workspace.getConfiguration('swark');
-        const customModel = config.get<string>('languageModelCustom');
-        const selectedModel = config.get<string>('languageModel') || 'gpt-4o';
-        
-        // Use custom model if specified, otherwise use the selected model from dropdown
-        const modelFamily = customModel || selectedModel;
-        
-        const models = await vscode.lm.selectChatModels({ family: modelFamily });
+        const config = vscode.workspace.getConfiguration("swark");
+        const configuredModel = config.get<string>("languageModel");
+        const models = await vscode.lm.selectChatModels({ family: configuredModel });
 
         if (models.length === 0) {
             throw new Error(
-                "No language models available. This may occur if there is no active GitHub Copilot subscription or the selected model is not available."
+                "Language model is not available. This may occur if there is no active GitHub Copilot subscription. " +
+                    "You can also try changing the selected model in swark.languageModel setting."
             );
         }
 
         const [model] = models;
-        console.log('Selected language model:', model);
+        console.log(model);
         this.sendModelSelectedTelemetry(model);
         return model;
     }
