@@ -1,10 +1,11 @@
 <h1 align="center">
-    <a href="https://swark.io#gh-light-mode-only">
-      <img src="./assets/logo/swark-logo-light-mode.png#gh-light-mode-only" width="30%"/>
-    </a>
-    <a href="https://swark.io#gh-dark-mode-only"> 
-      <img src="./assets/logo/swark-logo-dark-mode.png#gh-dark-mode-only" width="30%"/>
-    </a>
+  <a href="https://swark.io">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/logo/swark-logo-dark-mode.png">
+      <source media="(prefers-color-scheme: light)" srcset="assets/logo/swark-logo-light-mode.png">
+      <img alt="Swark logo" src="assets/logo/swark-logo-light-mode.png" width="30%">
+    </picture>
+  </a>
 </h1>
 
 <p align="center">
