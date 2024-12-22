@@ -5,7 +5,7 @@ export class ModelInteractor {
     public static async getModel(): Promise<vscode.LanguageModelChat> {
         const availableModels = await this.getAvailableModels();
         const configuredModel = this.getConfiguredModel();
-        const selectedModel = this.getSelectedModel(availableModels, configuredModel);
+        const selectedModel = this.selectModel(availableModels, configuredModel);
 
         this.sendModelSelectedTelemetry(selectedModel);
         return selectedModel;
@@ -36,7 +36,7 @@ export class ModelInteractor {
         return configuredModel;
     }
 
-    private static getSelectedModel(
+    private static selectModel(
         availableModels: vscode.LanguageModelChat[],
         configuredModel: string
     ): vscode.LanguageModelChat {
