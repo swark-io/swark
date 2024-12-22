@@ -20,7 +20,7 @@ export class CreateArchitectureCommand {
 
         vscode.window.showInformationMessage("Creating architecture diagram...");
         const response = await this.sendPrompt(model, prompt);
-        await showDiagram(response);
+        await showDiagram(model.name, response);
     }
 
     private static async logTotalTokens(
