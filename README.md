@@ -101,9 +101,7 @@ To resolve this issue:
 
 ## Release Notes
 
-### 1.0.0
-
-Initial release of Swark VS Code extension.
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## Privacy Notice
 
