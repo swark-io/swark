@@ -3,21 +3,55 @@ import { telemetry } from "../telemetry";
 
 export class ModelInteractor {
     public static async getModel(): Promise<vscode.LanguageModelChat> {
+        const availableModels = await this.getAvailableModels();
+        const configuredModel = this.getConfiguredModel();
+        const selectedModel = this.getSelectedModel(availableModels, configuredModel);
+
+        this.sendModelSelectedTelemetry(selectedModel);
+        return selectedModel;
+    }
+
+    private static async getAvailableModels(): Promise<vscode.LanguageModelChat[]> {
+        const availableModels = await vscode.lm.selectChatModels({
+            vendor: "copilot",
+        });
+        console.log(availableModels);
+
+        if (availableModels.length === 0) {
+            throw new Error("No language models are available. Ensure you have GitHub Copilot extension installed.");
+        }
+
+        return availableModels;
+    }
+
+    private static getConfiguredModel(): string {
         const config = vscode.workspace.getConfiguration("swark");
         const configuredModel = config.get<string>("languageModel");
-        const models = await vscode.lm.selectChatModels({ family: configuredModel });
+        console.log("configuredModel: " + configuredModel);
 
-        if (models.length === 0) {
+        if (!configuredModel) {
+            throw new Error('Language model is not configured. Please set "swark.languageModel" setting.');
+        }
+
+        return configuredModel;
+    }
+
+    private static getSelectedModel(
+        availableModels: vscode.LanguageModelChat[],
+        configuredModel: string
+    ): vscode.LanguageModelChat {
+        const selectedModel = availableModels.find((model) => model.family === configuredModel);
+
+        if (!selectedModel) {
+            const availableModelFamilies = availableModels.map((model) => model.family);
             throw new Error(
-                "Language model is not available. This may occur if there is no active GitHub Copilot subscription. " +
-                    "You can also try changing the selected model in swark.languageModel setting."
+                `Language model "${configuredModel}" is not available. Available models: ${availableModelFamilies.join(
+                    ", "
+                )}`
             );
         }
 
-        const [model] = models;
-        console.log(model);
-        this.sendModelSelectedTelemetry(model);
-        return model;
+        return selectedModel;
     }
 
     private static sendModelSelectedTelemetry(model: vscode.LanguageModelChat): void {

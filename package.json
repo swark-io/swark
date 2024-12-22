@@ -91,11 +91,13 @@
                     "default": "gpt-4o",
                     "enum": [
                         "gpt-4o",
-                        "gpt-4o-mini",
-                        "o1-preview",
-                        "o1-mini",
                         "claude-3.5-sonnet",
-                        "gemini-1.5-pro"
+                        "o1-ga"
+                    ],
+                    "enumDescriptions": [
+                        "GPT 4o",
+                        "Claude 3.5 Sonnet",
+                        "OpenAI o1"
                     ]
                 }
             }
