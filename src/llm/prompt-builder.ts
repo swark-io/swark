@@ -21,6 +21,7 @@ export class PromptBuilder {
             3. Avoid naming a subgraph and a node within it with the same name to prevent cycles.
             4. Avoid the following characters in the output: "{}:()
             5. The architecture should be high-level and not too detailed.
+            6. The output should include only the diagram, and not any additional text or explanations. 
     
             The code files are given in the following format: full path, newline, file content. 
             Different files will be separated with '${PromptBuilder.FILE_SEPERATOR}'.\n`
