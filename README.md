@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=swark.swark"> 
+  <a href="https://marketplace.visualstudio.com/items?itemName=swark.swark" style="text-decoration: none;">
     <img src="https://img.shields.io/visual-studio-marketplace/v/swark.swark?label=Visual%20Studio%20Marketplace"/>
   </a>
   <a href="https://github.com/swark-io/swark/issues"> 
