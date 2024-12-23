@@ -103,6 +103,11 @@ To resolve this issue:
 
 See [CHANGELOG.md](CHANGELOG.md).
 
+## Contributing
+
+Swark welcomes community contributions.
+Please see our [Contribution Guide](CONTRIBUTING.md) for details on how to contribute.
+
 ## Privacy Notice
 
 This extension collects telemetry data to help improve the product experience. The data collected includes:
