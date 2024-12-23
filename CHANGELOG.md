@@ -19,19 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   N/A
 
-## [v1.2.0](https://github.com/swark-io/swark/compare/v1.1.1...v1.2.0) - 2024-12-23
+## [1.2.0](https://github.com/swark-io/swark/compare/v1.1.1...v1.2.0) - 2024-12-23
 
 ### Added
 
--   Generate links to Mermaid Live Editor to view or edit the diagram. (#4)
+-   Generate links to Mermaid Live Editor to view or edit the diagram. ([#4](https://github.com/swark-io/swark/issues/4))
 
 ### Changed
 
 -   Set default model to `claude-3.5-sonnet`.
-
-### Fixed
-
--   N/A
 
 ## [1.1.1](https://github.com/swark-io/swark/compare/v1.1.0...v1.1.1) - 2024-12-22
 
