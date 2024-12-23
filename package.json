@@ -122,6 +122,7 @@
     "devDependencies": {
         "@types/mocha": "^10.0.7",
         "@types/node": "20.x",
+        "@types/pako": "^2.0.3",
         "@types/vscode": "^1.91.0",
         "@typescript-eslint/eslint-plugin": "^7.14.1",
         "@typescript-eslint/parser": "^7.11.0",
@@ -131,6 +132,8 @@
         "typescript": "^5.4.5"
     },
     "dependencies": {
-        "@vscode/extension-telemetry": "^0.9.7"
+        "@vscode/extension-telemetry": "^0.9.7",
+        "js-base64": "^3.7.7",
+        "pako": "^2.1.0"
     }
 }
