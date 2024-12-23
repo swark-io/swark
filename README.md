@@ -9,15 +9,17 @@
 </h1>
 
 <p align="center">
-  <b>Automatic Architecture Diagrams from Code</b> <br />
-  </b>Powered by LLMs</b>
+  <b>Automatic Architecture Diagrams from Code</b><br />
+  Free • Open Source • Powered by LLMs
 </p>
 
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=swark.swark">
     <img src="https://img.shields.io/visual-studio-marketplace/v/swark.swark?label=Visual%20Studio%20Marketplace" /></a>
   <a href="https://github.com/swark-io/swark/issues">
-    <img alt="GitHub Issues" src="https://img.shields.io/github/issues/swark-io/swark" />
+    <img alt="GitHub Issues" src="https://img.shields.io/github/issues/swark-io/swark" /></a>
+  <a href="https://github.com/swark-io/swark/blob/main/CONTRIBUTING.md">
+    <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen" alt="PRs welcome!" />
   </a>
 </p>
 
@@ -50,8 +52,8 @@ It's important to note that source code is **only shared with GitHub Copilot**, 
 
 ## Requirements
 
--   **GitHub Copilot Subscription**: Swark is currently working directly with GitHub Copilot and requires an [active subscription](https://github.com/features/copilot#pricing) to work.
--   **Mermaid Markdown Preview**: in order to preview the diagram in VS Code you can install the [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension. Alternatively, you can copy the Mermaid code and paste it into any [Mermaid editor](https://mermaid.live/).
+-   **GitHub Copilot**: Swark is integrated with GitHub Copilot to invoke LLM queries. Install it via [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot). Notice that GitHub Copilot now offers a free tier.
+-   **Mermaid Markdown Preview**: to preview the diagram in VS Code you can install the [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension. Otherwise, you can use the provided links to open it in Mermaid Live Editor.
 
 ## Installation
 
