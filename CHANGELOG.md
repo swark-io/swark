@@ -9,11 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   N/A
+-   Generate links to Mermaid Live Editor to view or edit the diagram. (#4)
 
 ### Changed
 
--   N/A
+-   Set default model to `claude-3.5-sonnet`.
 
 ### Fixed
 

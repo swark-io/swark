@@ -88,7 +88,7 @@
                 "swark.languageModel": {
                     "type": "string",
                     "markdownDescription": "Language model to use for diagram generation.",
-                    "default": "gpt-4o",
+                    "default": "claude-3.5-sonnet",
                     "enum": [
                         "gpt-4o",
                         "claude-3.5-sonnet",
