@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { selectFolder } from "../io/input-selection";
 import { ModelInteractor } from "../llm/model-interactor";
 import { PromptBuilder } from "../llm/prompt-builder";
-import { showDiagram } from "../view";
+import { showDiagram } from "../view/diagram";
 import { TokenCounter } from "../types";
 import { RepositoryReader } from "../io/repository-reader";
 import { countTotalTokens, getMaxTokensForFiles } from "../llm/token-count-utils";

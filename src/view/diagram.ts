@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { telemetry } from "./telemetry";
+import { telemetry } from "../telemetry";
 
 export async function showDiagram(modelName: string, llmResponse: string): Promise<void> {
     const content = getMarkdownContent(modelName, llmResponse);
