@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { File, TokenCounter } from "../types";
 import { PromptBuilder } from "../llm/prompt-builder";
 import { telemetry } from "../telemetry";
+import { LanguageCounter } from "./language-counter";
 
 export class RepositoryReader {
     private readonly baseFolder: vscode.Uri;
@@ -55,6 +56,7 @@ export class RepositoryReader {
     private async openFiles(uris: vscode.Uri[]): Promise<File[]> {
         let files: Array<File> = [];
         let totalTokens = 0;
+        const languageCounter = new LanguageCounter();
 
         for (const uri of uris) {
             const file = await this.openFile(uri);
@@ -64,11 +66,12 @@ export class RepositoryReader {
             if (totalTokens + numTokensInFile <= this.maxTokens) {
                 totalTokens += numTokensInFile;
                 files.push(file);
+                languageCounter.increment(file.languageId);
             }
         }
 
         this.showProcessingMessage(files.length, uris.length);
-        this.sendTelemetryEvent(files.length, uris.length);
+        this.sendTelemetryEvent(files.length, uris.length, languageCounter.toObject());
         console.log(files);
         return files;
     }
@@ -76,7 +79,7 @@ export class RepositoryReader {
     private async openFile(uri: vscode.Uri): Promise<File> {
         const filePath = uri.fsPath;
         const textDocument = await vscode.workspace.openTextDocument(filePath);
-        return { path: filePath, content: textDocument.getText() };
+        return { path: filePath, content: textDocument.getText(), languageId: textDocument.languageId };
     }
 
     private showProcessingMessage(numProcessedFiles: number, totalFiles: number): void {
@@ -89,7 +92,11 @@ export class RepositoryReader {
         }
     }
 
-    private sendTelemetryEvent(numProcessedFiles: number, totalFiles: number): void {
-        telemetry.sendTelemetryEvent("filesProcessed", {}, { numProcessedFiles, totalFiles });
+    private sendTelemetryEvent(
+        numProcessedFiles: number,
+        totalFiles: number,
+        languages: { [key: string]: number }
+    ): void {
+        telemetry.sendTelemetryEvent("filesProcessed", {}, { numProcessedFiles, totalFiles, ...languages });
     }
 }
