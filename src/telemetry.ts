@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import TelemetryReporter from "@vscode/extension-telemetry";
 
 const connectionString =
@@ -6,7 +5,6 @@ const connectionString =
 
 export let telemetry: TelemetryReporter;
 
-export function initializeTelemetry(context: vscode.ExtensionContext): void {
+export function initializeTelemetry(): void {
     telemetry = new TelemetryReporter(connectionString);
-    context.subscriptions.push(telemetry);
 }
