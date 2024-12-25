@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 -   Add extension deactivation telemetry.
+-   Add telemetry of programming languages used.
+-   Write diagram to file in path `workspace/swark-output/timestamp__diagram.md`, e.g. `swark/swark-output/2024-12-25__20-25-34__diagram.md`.
 
 ### Changed
 

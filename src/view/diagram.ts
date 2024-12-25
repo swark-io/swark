@@ -2,15 +2,12 @@ import * as vscode from "vscode";
 import { telemetry } from "../telemetry";
 import { MermaidLinkGenerator } from "./mermaid/link-generator";
 
-export async function showDiagram(modelName: string, llmResponse: string): Promise<void> {
-    const content = getMarkdownContent(modelName, llmResponse);
-    const document = await vscode.workspace.openTextDocument({ content, language: "markdown" });
-    await vscode.window.showTextDocument(document);
-    await vscode.commands.executeCommand("markdown.showPreview");
+export async function showDiagram(uri: vscode.Uri): Promise<void> {
+    await vscode.commands.executeCommand("markdown.showPreview", uri);
     telemetry.sendTelemetryEvent("diagramShown");
 }
 
-function getMarkdownContent(modelName: string, llmResponse: string): string {
+export function getMarkdownContent(modelName: string, llmResponse: string): string {
     const mermaidCode = llmResponse.replace(/```mermaid|```/g, "");
     const linkGenerator = new MermaidLinkGenerator(mermaidCode);
 

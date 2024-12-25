@@ -2,7 +2,8 @@ import * as vscode from "vscode";
 import { selectFolder } from "../io/input-selection";
 import { ModelInteractor } from "../llm/model-interactor";
 import { PromptBuilder } from "../llm/prompt-builder";
-import { showDiagram } from "../view/diagram";
+import { getMarkdownContent, showDiagram } from "../view/diagram";
+import { OutputWriter } from "../io/output-writer";
 import { TokenCounter } from "../types";
 import { RepositoryReader } from "../io/repository-reader";
 import { countTotalTokens, getMaxTokensForFiles } from "../llm/token-count-utils";
@@ -20,7 +21,12 @@ export class CreateArchitectureCommand {
 
         vscode.window.showInformationMessage("Creating architecture diagram...");
         const response = await this.sendPrompt(model, prompt);
-        await showDiagram(model.name, response);
+        const markdownContent = getMarkdownContent(model.name, response);
+
+        const outputFolder = this.getOutputFolder(selectedFolder);
+        const writer = new OutputWriter(outputFolder);
+        const uri = await writer.writeDiagramFile(markdownContent);
+        await showDiagram(uri);
     }
 
     private static async logTotalTokens(
@@ -51,5 +57,21 @@ export class CreateArchitectureCommand {
         const endTime = performance.now();
         telemetry.sendTelemetryEvent("promptSent", {}, { responseTime: endTime - startTime });
         return response;
+    }
+
+    private static getOutputFolder(selectedFolder: vscode.Uri): vscode.Uri {
+        const rootFolder = this.getRootFolder(selectedFolder);
+        return vscode.Uri.joinPath(rootFolder, "swark-output");
+    }
+
+    private static getRootFolder(selectedFolder: vscode.Uri): vscode.Uri {
+        const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+
+        if (workspaceFolder) {
+            return workspaceFolder.uri;
+        }
+
+        telemetry.sendTelemetryEvent("noWorkspaceFolder");
+        return selectedFolder;
     }
 }
