@@ -9,14 +9,6 @@ export class OutputWriter {
         this.timestamp = this.getTimestamp();
     }
 
-    public async writeDiagramFile(markdownContent: string): Promise<vscode.Uri> {
-        const filename = `${this.timestamp}__diagram.md`;
-        const uri = vscode.Uri.joinPath(this.outputFolder, filename);
-        const content = new TextEncoder().encode(markdownContent);
-        await vscode.workspace.fs.writeFile(uri, content);
-        return uri;
-    }
-
     private getTimestamp(): string {
         const now = new Date();
         const locale = "en-US";
@@ -41,5 +33,26 @@ export class OutputWriter {
             .replaceAll(":", "-");
 
         return `${year}-${month}-${day}__${time}`;
+    }
+
+    public async writeDiagramFile(markdownContent: string): Promise<vscode.Uri> {
+        const filename = this.getFileName("diagram");
+        return await this.writeFile(filename, markdownContent);
+    }
+
+    public async writeLogFile(markdownContent: string): Promise<vscode.Uri> {
+        const filename = this.getFileName("log");
+        return await this.writeFile(filename, markdownContent);
+    }
+
+    private getFileName(type: string): string {
+        return `${this.timestamp}__${type}.md`;
+    }
+
+    private async writeFile(filename: string, content: string): Promise<vscode.Uri> {
+        const uri = vscode.Uri.joinPath(this.outputFolder, filename);
+        const encoded = new TextEncoder().encode(content);
+        await vscode.workspace.fs.writeFile(uri, encoded);
+        return uri;
     }
 }

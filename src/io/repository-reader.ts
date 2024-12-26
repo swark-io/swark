@@ -17,7 +17,7 @@ export class RepositoryReader {
         this.maxTokens = maxTokens;
     }
 
-    public async readFiles(): Promise<string> {
+    public async readFiles(): Promise<File[]> {
         const searchPattern = this.getSearchPattern();
         const excludePattern = this.getExcludePattern();
         const maxFiles = this.config.get<number>("maxFiles");
@@ -27,8 +27,7 @@ export class RepositoryReader {
             excludePattern,
             maxFiles
         );
-        const files: Array<File> = await this.openFiles(uris);
-        return files.map(PromptBuilder.encodeFile).join("\n");
+        return await this.openFiles(uris);
     }
 
     private getSearchPattern(): string {
@@ -54,7 +53,7 @@ export class RepositoryReader {
     }
 
     private async openFiles(uris: vscode.Uri[]): Promise<File[]> {
-        let files: Array<File> = [];
+        let files: File[] = [];
         let totalTokens = 0;
         const languageCounter = new LanguageCounter();
 

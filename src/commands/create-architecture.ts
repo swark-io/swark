@@ -2,12 +2,14 @@ import * as vscode from "vscode";
 import { selectFolder } from "../io/input-selection";
 import { ModelInteractor } from "../llm/model-interactor";
 import { PromptBuilder } from "../llm/prompt-builder";
-import { getMarkdownContent, showDiagram } from "../view/diagram";
-import { OutputWriter } from "../io/output-writer";
+import { OutputFormatter } from "../view/output-formatter";
+import { OutputWriter } from "../view/output-writer";
 import { TokenCounter } from "../types";
 import { RepositoryReader } from "../io/repository-reader";
 import { countTotalTokens, getMaxTokensForFiles } from "../llm/token-count-utils";
 import { telemetry } from "../telemetry";
+import { showDiagram } from "../view/viewer";
+import { File } from "../types";
 
 export class CreateArchitectureCommand {
     public static async run(): Promise<void> {
@@ -15,18 +17,24 @@ export class CreateArchitectureCommand {
         const model = await ModelInteractor.getModel();
         const tokenCounter = model.countTokens;
 
-        const filesContents = await this.readRepositoryFiles(selectedFolder, tokenCounter, model.maxInputTokens);
-        const prompt = PromptBuilder.createPrompt(filesContents);
+        const files = await this.readRepositoryFiles(selectedFolder, tokenCounter, model.maxInputTokens);
+        const prompt = PromptBuilder.createPrompt(files);
         await this.logTotalTokens(prompt, tokenCounter);
 
         vscode.window.showInformationMessage("Creating architecture diagram...");
         const response = await this.sendPrompt(model, prompt);
-        const markdownContent = getMarkdownContent(model.name, response);
+        const diagramUri = await this.writeOutputFiles(selectedFolder, model, response, files);
+        await showDiagram(diagramUri);
+    }
 
-        const outputFolder = this.getOutputFolder(selectedFolder);
-        const writer = new OutputWriter(outputFolder);
-        const uri = await writer.writeDiagramFile(markdownContent);
-        await showDiagram(uri);
+    private static async readRepositoryFiles(
+        selectedFolder: vscode.Uri,
+        tokenCounter: TokenCounter,
+        llmMaxInputTokens: number
+    ): Promise<File[]> {
+        const maxTokens = await getMaxTokensForFiles(llmMaxInputTokens, tokenCounter);
+        const repositoryReader = new RepositoryReader(selectedFolder, tokenCounter, maxTokens);
+        return await repositoryReader.readFiles();
     }
 
     private static async logTotalTokens(
@@ -38,16 +46,6 @@ export class CreateArchitectureCommand {
         telemetry.sendTelemetryEvent("promptBuilt", {}, { totalTokens });
     }
 
-    private static async readRepositoryFiles(
-        selectedFolder: vscode.Uri,
-        tokenCounter: TokenCounter,
-        llmMaxInputTokens: number
-    ): Promise<string> {
-        const maxTokens = await getMaxTokensForFiles(llmMaxInputTokens, tokenCounter);
-        const repositoryReader = new RepositoryReader(selectedFolder, tokenCounter, maxTokens);
-        return await repositoryReader.readFiles();
-    }
-
     private static async sendPrompt(
         model: vscode.LanguageModelChat,
         prompt: vscode.LanguageModelChatMessage[]
@@ -57,6 +55,21 @@ export class CreateArchitectureCommand {
         const endTime = performance.now();
         telemetry.sendTelemetryEvent("promptSent", {}, { responseTime: endTime - startTime });
         return response;
+    }
+
+    private static async writeOutputFiles(
+        selectedFolder: vscode.Uri,
+        model: vscode.LanguageModelChat,
+        response: string,
+        files: File[]
+    ): Promise<vscode.Uri> {
+        const outputFolder = this.getOutputFolder(selectedFolder);
+        const writer = new OutputWriter(outputFolder);
+        const [diagramUri, _] = await Promise.all([
+            this.writeDiagramFile(model, response, writer),
+            this.writeLogFile(files, selectedFolder, model, writer),
+        ]);
+        return diagramUri;
     }
 
     private static getOutputFolder(selectedFolder: vscode.Uri): vscode.Uri {
@@ -73,5 +86,26 @@ export class CreateArchitectureCommand {
 
         telemetry.sendTelemetryEvent("noWorkspaceFolder");
         return selectedFolder;
+    }
+
+    private static async writeDiagramFile(
+        model: vscode.LanguageModelChat,
+        response: string,
+        writer: OutputWriter
+    ): Promise<vscode.Uri> {
+        const diagramFileContent = OutputFormatter.getDiagramFileContent(model.name, response);
+        const uri = await writer.writeDiagramFile(diagramFileContent);
+        return uri;
+    }
+
+    private static async writeLogFile(
+        files: File[],
+        selectedFolder: vscode.Uri,
+        model: vscode.LanguageModelChat,
+        writer: OutputWriter
+    ): Promise<void> {
+        const filePaths = files.map((file) => file.path);
+        const logFileContent = OutputFormatter.getLogFileContent(selectedFolder, model, filePaths);
+        await writer.writeLogFile(logFileContent);
     }
 }

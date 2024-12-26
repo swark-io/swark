@@ -4,7 +4,8 @@ import { File } from "../types";
 export class PromptBuilder {
     private static readonly FILE_SEPERATOR = "==========";
 
-    public static createPrompt(filesContents: string): vscode.LanguageModelChatMessage[] {
+    public static createPrompt(files: File[]): vscode.LanguageModelChatMessage[] {
+        const filesContents = files.map(PromptBuilder.encodeFile).join("\n");
         return [this.getSystemPrompt(), vscode.LanguageModelChatMessage.User(filesContents)];
     }
 
