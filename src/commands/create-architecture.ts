@@ -21,7 +21,6 @@ export class CreateArchitectureCommand {
         const prompt = PromptBuilder.createPrompt(files);
         await this.logTotalTokens(prompt, tokenCounter);
 
-        vscode.window.showInformationMessage("Creating architecture diagram...");
         const response = await this.sendPrompt(model, prompt);
         const diagramUri = await this.writeOutputFiles(selectedFolder, model, response, files);
         await showDiagram(diagramUri);
@@ -51,7 +50,17 @@ export class CreateArchitectureCommand {
         prompt: vscode.LanguageModelChatMessage[]
     ): Promise<string> {
         const startTime = performance.now();
-        const response = await ModelInteractor.sendPrompt(model, prompt);
+
+        const response = await vscode.window.withProgress(
+            {
+                location: vscode.ProgressLocation.Notification,
+                title: "Creating architecture diagram...",
+            },
+            async (_progress) => {
+                return await ModelInteractor.sendPrompt(model, prompt);
+            }
+        );
+
         const endTime = performance.now();
         telemetry.sendTelemetryEvent("promptSent", {}, { responseTime: endTime - startTime });
         return response;
