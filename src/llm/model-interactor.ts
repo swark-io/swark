@@ -18,7 +18,10 @@ export class ModelInteractor {
         console.log(availableModels);
 
         if (availableModels.length === 0) {
-            throw new Error("No language models are available. Ensure you have GitHub Copilot extension installed.");
+            throw new Error(
+                "No language models are available. " +
+                    "Ensure you have GitHub Copilot extension installed: https://marketplace.visualstudio.com/items?itemName=GitHub.copilot"
+            );
         }
 
         return availableModels;
