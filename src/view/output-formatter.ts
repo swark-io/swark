@@ -3,7 +3,7 @@ import { MermaidLinkGenerator } from "./mermaid/link-generator";
 
 export class OutputFormatter {
     public static getDiagramFileContent(modelName: string, llmResponse: string): string {
-        const mermaidCode = llmResponse.replace(/```mermaid|```/g, "");
+        const mermaidCode = (llmResponse.match(/```mermaid([\s\S]*?)```/) || ["", ""])[1].trim();
         const linkGenerator = new MermaidLinkGenerator(mermaidCode);
 
         return `<p align="center">
