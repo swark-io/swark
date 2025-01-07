@@ -50,21 +50,18 @@ export class ModelInteractor {
         const configuredModel = this.findModel(availableModels, configuredModelFamily);
 
         if (configuredModel) {
-            console.log("configured");
             return configuredModel;
         }
 
         const fallbackModel = this.findModel(availableModels, fallbackModelFamily);
 
         if (fallbackModel) {
-            console.log("fallback");
             this.showModelNotAvailableMessage(configuredModelFamily, fallbackModelFamily, availableModels);
             return fallbackModel;
         }
 
         const someModel = availableModels[0];
         this.showModelNotAvailableMessage(configuredModelFamily, someModel.family, availableModels);
-        console.log("someModel");
         return someModel;
     }
 
