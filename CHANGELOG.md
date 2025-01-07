@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   N/A
+-   Improve error message when no language model is available.
+-   Default to `gpt-4o` when configured model is not available.
 
 ### Fixed
 

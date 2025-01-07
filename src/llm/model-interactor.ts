@@ -2,12 +2,15 @@ import * as vscode from "vscode";
 import { telemetry } from "../telemetry";
 
 export class ModelInteractor {
+    private static readonly FALLBACK_MODEL = "gpt-4o";
+
     public static async getModel(): Promise<vscode.LanguageModelChat> {
         const availableModels = await this.getAvailableModels();
         const configuredModel = this.getConfiguredModel();
-        const selectedModel = this.selectModel(availableModels, configuredModel);
+        const fallbackModel = this.FALLBACK_MODEL;
+        const selectedModel = this.selectModel(availableModels, configuredModel, fallbackModel);
 
-        this.sendModelSelectedTelemetry(selectedModel);
+        this.sendModelSelectedTelemetry(selectedModel, configuredModel, fallbackModel, availableModels);
         return selectedModel;
     }
 
@@ -41,28 +44,74 @@ export class ModelInteractor {
 
     private static selectModel(
         availableModels: vscode.LanguageModelChat[],
-        configuredModel: string
+        configuredModelFamily: string,
+        fallbackModelFamily: string
     ): vscode.LanguageModelChat {
-        const selectedModel = availableModels.find((model) => model.family === configuredModel);
+        const configuredModel = this.findModel(availableModels, configuredModelFamily);
 
-        if (!selectedModel) {
-            const availableModelFamilies = availableModels.map((model) => model.family);
-            throw new Error(
-                `Language model "${configuredModel}" is not available. Available models: ${availableModelFamilies.join(
-                    ", "
-                )}`
-            );
+        if (configuredModel) {
+            console.log("configured");
+            return configuredModel;
         }
 
-        return selectedModel;
+        const fallbackModel = this.findModel(availableModels, fallbackModelFamily);
+
+        if (fallbackModel) {
+            console.log("fallback");
+            this.showModelNotAvailableMessage(configuredModelFamily, fallbackModelFamily, availableModels);
+            return fallbackModel;
+        }
+
+        const someModel = availableModels[0];
+        this.showModelNotAvailableMessage(configuredModelFamily, someModel.family, availableModels);
+        console.log("someModel");
+        return someModel;
     }
 
-    private static sendModelSelectedTelemetry(model: vscode.LanguageModelChat): void {
+    private static findModel(
+        availableModels: vscode.LanguageModelChat[],
+        modelFamily: string
+    ): vscode.LanguageModelChat | undefined {
+        return availableModels.find((model) => model.family === modelFamily);
+    }
+
+    private static showModelNotAvailableMessage(
+        configuredModelFamily: string,
+        alternativeModelFamily: string,
+        availableModels: vscode.LanguageModelChat[]
+    ): void {
+        vscode.window.showInformationMessage(
+            `Configured model "${configuredModelFamily}" is not available. Using "${alternativeModelFamily}" instead. ` +
+                `You can change this in "swark.languageModel" setting. Available models: ${this.availableModelsToString(
+                    availableModels
+                )}`
+        );
+    }
+
+    private static sendModelSelectedTelemetry(
+        model: vscode.LanguageModelChat,
+        configuredModel: string,
+        fallbackModel: string,
+        availableModels: vscode.LanguageModelChat[]
+    ): void {
         telemetry.sendTelemetryEvent(
             "modelSelected",
-            { name: model.name, id: model.id, vendor: model.vendor, family: model.family, version: model.version },
+            {
+                name: model.name,
+                id: model.id,
+                vendor: model.vendor,
+                family: model.family,
+                version: model.version,
+                configuredModel,
+                fallbackModel,
+                availableModels: this.availableModelsToString(availableModels),
+            },
             { maxInputTokens: model.maxInputTokens }
         );
+    }
+
+    private static availableModelsToString(availableModels: vscode.LanguageModelChat[]): string {
+        return availableModels.map((model) => model.family).join(", ");
     }
 
     public static async sendPrompt(
