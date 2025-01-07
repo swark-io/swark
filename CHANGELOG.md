@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.3...main)
+## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.5...main)
 
 ### Added
 
@@ -13,14 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Improve error message when no language model is available.
--   Default to `gpt-4o` when configured model is not available.
+-   N/A
 
 ### Fixed
 
 -   N/A
 
-## [1.3.3](https://github.com/swark-io/swark/compare/v1.3.0...v1.3.3) - 2024-12-31
+## [1.3.5](https://github.com/swark-io/swark/compare/v1.3.4...v1.3.5) - 2025-01-07
+
+### Changed
+
+-   Improve error message when no language model is available.
+-   Default to `gpt-4o` when configured model is not available.
+-   Add telemetry of available models.
+
+## [1.3.4](https://github.com/swark-io/swark/compare/v1.3.0...v1.3.4) - 2024-12-31
 
 ### Changed
 
