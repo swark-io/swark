@@ -1,9 +1,11 @@
 import * as vscode from "vscode";
 import { MermaidLinkGenerator } from "./mermaid/link-generator";
+import { telemetry } from "../telemetry";
 
 export class OutputFormatter {
     public static getDiagramFileContent(modelName: string, llmResponse: string): string {
-        const mermaidCode = llmResponse.replace(/```mermaid|```/g, "");
+        const mermaidBlock = this.getMermaidBlock(llmResponse);
+        const mermaidCode = mermaidBlock.replace(/```mermaid|```/g, "");
         const linkGenerator = new MermaidLinkGenerator(mermaidCode);
 
         return `<p align="center">
@@ -21,7 +23,23 @@ For any issues or feature requests, please visit our [GitHub repository](https:/
 **Model**: ${modelName}  
 **Mermaid Live Editor**: [View](${linkGenerator.createViewLink()}) | [Edit](${linkGenerator.createEditLink()})
 
-${llmResponse}`;
+${mermaidBlock}`;
+    }
+
+    public static getMermaidBlock(llmResponse: string): string {
+        const matches = llmResponse.match(/```mermaid[\s\S]*```/);
+
+        if (!matches) {
+            throw new Error("No Mermaid block found in the language model response. Please try again.");
+        }
+
+        const block = matches[0];
+
+        if (block !== llmResponse) {
+            telemetry.sendTelemetryEvent("llmResponseContainedExtraPayload");
+        }
+
+        return block;
     }
 
     public static getLogFileContent(
