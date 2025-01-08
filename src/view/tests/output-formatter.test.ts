@@ -1,9 +1,12 @@
 import * as assert from "assert";
 import { OutputFormatter } from "../output-formatter";
+import { initializeTelemetry } from "../../telemetry";
 
 suite("OutputFormatter Test Suite", () => {
     const validMermaidBlock =
         "```mermaid\ngraph TD\n    subgraph Extension_\n        Extension[Extension Entry Point]\n        CreateArchitectureCommand[Create Architecture Command]\n    end\n\n    Extension --> CreateArchitectureCommand\n```";
+
+    initializeTelemetry();
 
     test("on valid response, getMermaidBlock is identity function", () => {
         runValidResponseTest(validMermaidBlock, validMermaidBlock);

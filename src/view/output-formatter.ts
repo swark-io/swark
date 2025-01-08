@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { MermaidLinkGenerator } from "./mermaid/link-generator";
+import { telemetry } from "../telemetry";
 
 export class OutputFormatter {
     public static getDiagramFileContent(modelName: string, llmResponse: string): string {
@@ -32,7 +33,13 @@ ${mermaidBlock}`;
             throw new Error("No Mermaid block found in the language model response. Please try again.");
         }
 
-        return matches[0];
+        const block = matches[0];
+
+        if (block !== llmResponse) {
+            telemetry.sendTelemetryEvent("llmResponseContainedExtraPayload");
+        }
+
+        return block;
     }
 
     public static getLogFileContent(
