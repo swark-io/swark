@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.5...main)
+## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.6...main)
 
 ### Added
 
@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 -   N/A
+
+## [1.3.6](https://github.com/swark-io/swark/compare/v1.3.5...v1.3.6) - 2025-01-08
+
+### Fixed
+
+-   Extract Mermaid block from LLM to ensure proper rendering of diagram and link creation. ([#8](https://github.com/swark-io/swark/issues/8))
 
 ## [1.3.5](https://github.com/swark-io/swark/compare/v1.3.4...v1.3.5) - 2025-01-07
 
