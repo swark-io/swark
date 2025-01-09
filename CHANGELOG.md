@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   N/A
+-   Change default model from `claude-3.5-sonnet` to `gpt-4o`, due to claude being not available for many users.
 
 ### Fixed
 
