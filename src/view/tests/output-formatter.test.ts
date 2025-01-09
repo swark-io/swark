@@ -38,6 +38,16 @@ suite("OutputFormatter Test Suite", () => {
         runInvalidResponseTest(emptyRepsonse);
     });
 
+    test("on a cyclic mermaid code, removeMermaidCodeCycles resolves the cycle", () => {
+        const cyclicMermaidCode = 
+            "graph TD\n    subgraph Extension\n        Extension[Extension Entry Point]\n        CreateArchitectureCommand[Create Architecture Command]\n    end\n\n    Extension --> CreateArchitectureCommand\n";
+        const resolvedMermaidCode = OutputFormatter.removeMermaidCodeCycles(cyclicMermaidCode);
+        const expectedResolvedMermaidCode = 
+            "graph TD\n    subgraph Extension\_\n        Extension[Extension Entry Point]\n        CreateArchitectureCommand[Create Architecture Command]\n    end\n\n    Extension --> CreateArchitectureCommand\n";
+        
+        assert.equal(resolvedMermaidCode, expectedResolvedMermaidCode);
+    });
+
     function runValidResponseTest(llmResponse: string, expectedResult: string): void {
         const result = OutputFormatter.getMermaidBlock(llmResponse);
         assert.equal(result, expectedResult);
