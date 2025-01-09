@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.6...main)
+## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.7...main)
 
 ### Added
 
@@ -13,11 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Change default model from `claude-3.5-sonnet` to `gpt-4o`, due to claude being not available for many users.
+-   N/A
 
 ### Fixed
 
 -   N/A
+
+## [1.3.7](https://github.com/swark-io/swark/compare/v1.3.6...v1.3.7) - 2025-01-09
+
+### Changed
+
+-   Change default model from `claude-3.5-sonnet` to `gpt-4o`, due to claude being not available for many users.
 
 ## [1.3.6](https://github.com/swark-io/swark/compare/v1.3.5...v1.3.6) - 2025-01-08
 
