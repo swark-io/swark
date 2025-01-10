@@ -6,7 +6,8 @@ export class OutputFormatter {
     public static getDiagramFileContent(modelName: string, llmResponse: string): string {
         const mermaidBlock = this.getMermaidBlock(llmResponse);
         const mermaidCode = mermaidBlock.replace(/```mermaid|```/g, "");
-        const linkGenerator = new MermaidLinkGenerator(mermaidCode);
+        const sanitizedCode = this.removeMermaidCodeCycles(mermaidCode);
+        const linkGenerator = new MermaidLinkGenerator(sanitizedCode);
 
         return `<p align="center">
 <img src="https://raw.githubusercontent.com/swark-io/swark/refs/heads/main/assets/logo/swark-logo-dark-mode.png" width="10%" />
@@ -40,6 +41,30 @@ ${mermaidBlock}`;
         }
 
         return block;
+    }
+
+    public static removeMermaidCodeCycles(mermaidCode: string): string {
+        const nodeRegex = /([A-Za-z0-9_]+)\[.+?\]/g;
+        const subgraphRegex = /subgraph\s+([A-Za-z0-9_]+)/g;
+        const nodeNames = new Set<string>();
+        let nodeMatch;
+
+        while ((nodeMatch = nodeRegex.exec(mermaidCode)) !== null) {
+            nodeNames.add(nodeMatch[1]);
+        }
+
+        return mermaidCode.replace(subgraphRegex, (match, subgraphName) => {
+            if (nodeNames.has(subgraphName)) {
+                let newName = subgraphName;
+
+                while (nodeNames.has(newName)) {
+                    newName += '_';
+                }
+
+                return `subgraph ${newName}`;
+            }
+            return match;
+        });
     }
 
     public static getLogFileContent(
