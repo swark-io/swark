@@ -32,12 +32,22 @@ Swark is **directly integrated with GitHub Copilot**, and requires no authentica
     <img src="./assets/demo.png" width="85%"/>
 </h1>
 
+### Why Swark?
+
+-   🌟 **Free and Open Source**: All you need is GitHub Copilot, which is now available for free. You can review Swark’s code to understand how it works, and contribute to make it better.
+-   🌍 **Universal Language Support**: Classic code visualization solutions are deterministic and require to incrementally add support in new languages or frameworks. With Swark, all the “logic” is encapsulated within the LLM, and therefore it natively support all languages.
+-   🔑 **Seamless Integration**: Swark integrates directly with GitHub Copilot. No additional setup, authentication, or API keys required.
+-   🛡️ **Privacy First**: Your source code is shared only with GitHub Copilot — no other external APIs or providers involved.
+-   🧜‍♀️ **Mermaid.js**: Swark generates diagrams in Mermaid.js, a popular diagram-as-code framework. You can edit and refine the diagrams as needed.
+
 ### Use Cases
 
--   🔎 **Learn a New Codebase**: Swark helps you quickly generate an architecture diagram of a repository, providing a high-level overview of the codebase without the need to manually explore files or folder structure. This allows you to focus on the areas most relevant to your work.
--   📕 **Documentation**: enhance your documentation with up-to-date architecture diagrams that are simple to create and require minimal engineering effort.
--   🧩 **Visualize Dependencies**: a dependency graph of your repo can help you spot unwanted dependencies and suboptimal design.
--   ✅ **Test Coverage**: include your tests in Swark's input to visualize your test coverage and identify areas that may be missing.
+-   🔎 **Learn a New Codebase**: Instantly generate architecture diagrams to gain a high-level understanding of unfamiliar repositories. Ideal for onboarding and tackling new projects.
+-   🤖 **Review AI-Generated Code**: As AI-generated projects become more common, Swark helps you quickly visualize their structure and ensure they meet your standards.
+-   📕 **Improve Documentation**: Keep your documentation fresh and detailed with up-to-date architecture diagrams that take minutes to create.
+-   🕰️ **Understand Legacy Code**: Quickly visualize and comprehend the structure of legacy codebases, making it easier to maintain and refactor.
+-   🧩 **Spot Design Flaws**: Visualize your repo’s dependency graph to identify unwanted dependencies or areas for optimization.
+-   ✅ **Test Coverage Insights**: Include test files in Swark’s input to see test coverage at a glance and address gaps.
 
 ## How it Works
 
@@ -61,15 +71,33 @@ Simply install Swark via the [VS Code Extension Marketplace](https://marketplace
 
 ## How to Use
 
-1. In VS Code, open the Command Palette and run: **Swark: Create Architecture Diagram**.\
+1. In VS Code, open the [Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) and run: **Swark: Create Architecture Diagram**.\
    Alternatively, you can use Swark's default keybindings: `cmd+shift+r` (Mac) or `ctrl+shift+r` (Windows).
 2. Select a folder to use in Swark's file search.
-3. Within a few seconds, a tab will open displaying a preview of your architecture diagram.\
-   Another tab will contain the diagram's code, which you can edit manually or copy for use in other tools.
+3. Within a few seconds, a tab will open displaying your architecture diagram.
 
 <h1 align="center">
-    <a href="https://github.com/user-attachments/assets/5b885430-d958-47a0-9daa-f64542844fba"><img src="./assets/demo.gif" width="85%" alt="Swark Demo"/></a>
+    <a href="https://github.com/user-attachments/assets/5b885430-d958-47a0-9daa-f64542844fba"><img src="https://github.com/swark-io/swark/raw/main/assets/demo.gif" width="85%" alt="Swark Demo"/></a>
 </h1>
+
+### Output
+
+Swark saves its output in `swark-output` folder under your workspace root folder.\
+On each run, Swark creates two output files:
+
+-   **Diagram file**: Contains the diagram's Mermaid code. This file is presented when you run Swark.\
+    Filename: `<date>__<time>__diagram.md`
+-   **Log file**: Contains information about the run, configuration, and files used to create the diagram. Can be used for debugging and issue reporting.\
+    Filename: `<date>__<time>__log.md`
+
+For example:
+
+```bash
+workspace-root
+└── swark-output
+    ├── 2025-01-09__20-18-38__diagram.md
+    └── 2025-01-09__20-18-38__log.md
+```
 
 ## Extension Settings
 
@@ -81,25 +109,6 @@ This extension contributes the following settings:
 | `swark.fileExtensions`  | List of file extensions to include in search.                                                                                            |
 | `swark.excludePatterns` | List of glob patterns to exclude from file search.<br>Defaults include: `**/.*` for hidden files, `**/node_modules/**` for node modules. |
 | `swark.languageModel`   | Language model to use for diagram generation.                                                                                            |
-
-## Known Issues
-
-### Mermaid Diagram Cycle
-
-The LLM's output may occasionally generate a cycle in the Mermaid code, resulting in the following error:
-
-```
-Syntax error in text
-mermaid version 11.4.0
-
-Setting Node as parent of Node would create a cycle
-```
-
-This occurs when a parent and child node share the same name.\
-To resolve this issue:
-
-1. Re-run Swark to generate a new result.
-2. Edit the diagram code manually by renaming the parent node to give it a unique name.
 
 ## Release Notes
 
