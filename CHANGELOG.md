@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.7...main)
+## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.8...main)
 
 ### Added
 
@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 -   N/A
+
+## [1.3.8](https://github.com/swark-io/swark/compare/v1.3.7...v1.3.8) - 2025-01-10
+
+### Changed
+
+-   Updated multiple sections of README.md.
+-   Reduce extension size by removing `demo.gif` from package.
+-   Throw an error when no files found in the selected folder, and instruct to update the `swark.fileExtensions` setting.
 
 ## [1.3.7](https://github.com/swark-io/swark/compare/v1.3.6...v1.3.7) - 2025-01-09
 

@@ -27,6 +27,15 @@ export class RepositoryReader {
             excludePattern,
             maxFiles
         );
+
+        if (uris.length === 0) {
+            this.sendNoFilesFoundTelemetry();
+            throw new Error(
+                "The selected folder does not contain any file that matches the configured file types. " +
+                    'You can update the supported types in "swark.fileExtensions" setting.'
+            );
+        }
+
         return await this.openFiles(uris);
     }
 
@@ -50,6 +59,16 @@ export class RepositoryReader {
         }
 
         return `{${excludePatterns.join(",")}}`;
+    }
+
+    private sendNoFilesFoundTelemetry(): void {
+        const currentDocumentLanguageId = this.getCurrentDocumentLanguageId();
+        telemetry.sendTelemetryErrorEvent("noFilesFound", { currentDocumentLanguageId });
+    }
+
+    private getCurrentDocumentLanguageId(): string | undefined {
+        const editor = vscode.window.activeTextEditor;
+        return editor?.document.languageId;
     }
 
     private async openFiles(uris: vscode.Uri[]): Promise<File[]> {
