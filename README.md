@@ -62,7 +62,7 @@ It's important to note that source code is **only shared with GitHub Copilot**, 
 
 ## Requirements
 
--   **GitHub Copilot**: Swark is integrated with GitHub Copilot to invoke LLM queries. Install it via [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot). Notice that GitHub Copilot now offers a free tier.
+-   **GitHub Copilot**: Swark is integrated with GitHub Copilot to invoke LLM queries. Install it via [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot). Notice that **GitHub Copilot now offers a free tier**.
 -   **Mermaid Markdown Preview**: to preview the diagram in VS Code you can install the [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension. Otherwise, you can use the provided links to open it in Mermaid Live Editor.
 
 ## Installation
