@@ -49,21 +49,10 @@ Swark is **directly integrated with GitHub Copilot**, and requires no authentica
 -   🧩 **Spot Design Flaws**: Visualize your repo’s dependency graph to identify unwanted dependencies or areas for optimization.
 -   ✅ **Test Coverage Insights**: Include test files in Swark’s input to see test coverage at a glance and address gaps.
 
-## How it Works
-
-1. **File Retrieval**: Swark retrieves code files within the chosen folder. Swark automatically adjusts the number of retrieved files to match the LLM max token limit.
-2. **Prompt Building**: based on the retrieved files, Swark builds a prompt to generate an architecture diagram. The code files are included in the prompt, together with instructions on how to build the diagram.
-3. **LLM Request**: Swark invokes LLM request to GitHub Copilot via VS Code [Language Model API](https://code.visualstudio.com/api/extension-guides/language-model).
-4. **Diagram Preview**: upon a successful response, the diagram is presented. This is done by creating a markdown file that includes the diagram in [Mermaid](https://mermaid.js.org/) syntax and previewing it.
-
-### Code Access and File Sharing
-
-It's important to note that source code is **only shared with GitHub Copilot**, and with no other external APIs or providers.
-
 ## Requirements
 
 -   **GitHub Copilot**: Swark is integrated with GitHub Copilot to invoke LLM queries. Install it via [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot). Notice that **GitHub Copilot now offers a free tier**.
--   **Mermaid Markdown Preview**: to preview the diagram in VS Code you can install the [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension. Otherwise, you can use the provided links to open it in Mermaid Live Editor.
+-   **[Optional] Mermaid Markdown Preview**: To preview the diagram in VS Code you can install the [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension. Alternatively, you can use the provided links to open it in Mermaid Live Editor.
 
 ## Installation
 
@@ -98,6 +87,17 @@ workspace-root
     ├── 2025-01-09__20-18-38__diagram.md
     └── 2025-01-09__20-18-38__log.md
 ```
+
+## How it Works
+
+1. **File Retrieval**: Swark retrieves code files within the chosen folder. Swark automatically adjusts the number of retrieved files to match the LLM max token limit.
+2. **Prompt Building**: Based on the retrieved files, Swark builds a prompt to generate an architecture diagram. The code files are included in the prompt, together with instructions on how to build the diagram.
+3. **LLM Request**: Swark invokes LLM request to GitHub Copilot via VS Code [Language Model API](https://code.visualstudio.com/api/extension-guides/language-model).
+4. **Diagram Preview**: Upon a successful response, the diagram is presented. This is done by creating a markdown file that includes the diagram in [Mermaid](https://mermaid.js.org/) syntax and previewing it.
+
+### Code Access and File Sharing
+
+It's important to note that source code is **only shared with GitHub Copilot**, and with no other external APIs or providers.
 
 ## Extension Settings
 
