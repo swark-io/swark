@@ -3,49 +3,10 @@ import { MermaidLinkGenerator } from "./mermaid/link-generator";
 import { telemetry } from "../telemetry";
 
 export class OutputFormatter {
-    public static checkCycles(mermaidCode: string): boolean {
-        const subgraphs = this.getSubgraphs(mermaidCode);
-        const nodes = this.getNodes(mermaidCode);
-
-        for (const subgraph of subgraphs) {
-            if (nodes.has(subgraph)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static getSubgraphs(mermaidCode: string): Set<string> {
-        const items = mermaidCode.matchAll(/subgraph ([^[\n]+)/g);
-        return new Set(Array.from(items, (item) => item[1].trim()));
-    }
-
-    public static getNodes(mermaidCode: string): Set<string> {
-        const inSubgraph = mermaidCode.match(/subgraph[\s\S]+end/g);
-        const nodes = new Set<string>();
-
-        if (inSubgraph) {
-            const lines = inSubgraph[0].split("\n");
-
-            for (let line of lines) {
-                line = line.trim();
-
-                if (line === "" || line.startsWith("subgraph") || line.startsWith("end")) {
-                    continue;
-                }
-
-                const node = line.split("[")[0];
-                nodes.add(node);
-            }
-        }
-
-        return nodes;
-    }
-
     public static getDiagramFileContent(modelName: string, llmResponse: string): string {
         const mermaidBlock = this.getMermaidBlock(llmResponse);
         const mermaidCode = mermaidBlock.replace(/```mermaid|```/g, "");
+        this.tryDetectCycle(mermaidCode);
         const linkGenerator = new MermaidLinkGenerator(mermaidCode);
 
         return `<p align="center">
@@ -80,6 +41,51 @@ ${mermaidBlock}`;
         }
 
         return block;
+    }
+
+    public static tryDetectCycle(mermaidCode: string): void {
+        try {
+            const cycleNode = this.detectCycle(mermaidCode);
+
+            if (cycleNode) {
+                console.log(`Cycle detected in the diagram at node: ${cycleNode}`);
+                telemetry.sendTelemetryErrorEvent("diagramCycleDetected");
+            }
+        } catch (error) {
+            telemetry.sendTelemetryErrorEvent("diagramCycleDetectionFailed");
+        }
+    }
+
+    public static detectCycle(mermaidCode: string): string | undefined {
+        const lines = mermaidCode.split("\n");
+        const parentNodes: string[] = [];
+
+        for (let line of lines) {
+            line = line.trim();
+
+            if (line.startsWith("subgraph")) {
+                const rest = line.substring("subgraph".length, line.length);
+                const subgraphName = rest.split("[")[0].trim();
+
+                if (parentNodes.includes(subgraphName)) {
+                    return subgraphName;
+                }
+
+                parentNodes.push(subgraphName);
+            } else if (line.startsWith("end")) {
+                parentNodes.pop();
+            } else if (line === "") {
+                continue;
+            } else {
+                const node = line.split("[")[0];
+
+                if (parentNodes.includes(node)) {
+                    return node;
+                }
+            }
+        }
+
+        return undefined;
     }
 
     public static getLogFileContent(
