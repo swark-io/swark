@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.9...main)
+## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.10...main)
 
 ### Added
 
@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 -   N/A
+
+## [1.3.10](https://github.com/swark-io/swark/compare/v1.3.9...v1.3.10) - 2025-01-14
+
+### Changed
+
+-   Set GitHub copilot extension as a dependency, as it is required in order for Swark to work.
 
 ## [1.3.9](https://github.com/swark-io/swark/compare/v1.3.8...v1.3.9) - 2025-01-12
 
