@@ -18,6 +18,9 @@
     "engines": {
         "vscode": "^1.91.0"
     },
+    "extensionDependencies": [
+        "github.copilot"
+    ],
     "categories": [
         "Programming Languages",
         "Machine Learning",
