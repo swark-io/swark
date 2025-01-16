@@ -21,7 +21,7 @@ export class MermaidCycleDetector {
 
     private detectCyclicSubgraph(): string | undefined {
         const lines = this.mermaidCode.split("\n");
-        const parentNodes: string[] = [];
+        const ancestorNodes: string[] = [];
 
         for (let line of lines) {
             line = line.trim();
@@ -30,19 +30,19 @@ export class MermaidCycleDetector {
                 const rest = line.substring("subgraph".length, line.length);
                 const subgraphName = rest.split("[")[0].trim();
 
-                if (parentNodes.includes(subgraphName)) {
+                if (ancestorNodes.includes(subgraphName)) {
                     return subgraphName;
                 }
 
-                parentNodes.push(subgraphName);
+                ancestorNodes.push(subgraphName);
             } else if (line.startsWith("end")) {
-                parentNodes.pop();
+                ancestorNodes.pop();
             } else if (line === "") {
                 continue;
             } else {
                 const node = line.split("[")[0];
 
-                if (parentNodes.includes(node)) {
+                if (ancestorNodes.includes(node)) {
                     return node;
                 }
             }
