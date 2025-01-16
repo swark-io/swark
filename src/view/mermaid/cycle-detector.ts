@@ -7,13 +7,16 @@ export class MermaidCycleDetector {
         this.mermaidCode = mermaidCode;
     }
 
-    public detectCycle(): void {
+    public detectCycle(): boolean {
         const cycleNode = this.detectCyclicSubgraph();
 
         if (cycleNode) {
-            console.log(`Cycle detected in the diagram at node: ${cycleNode}`);
+            console.log(`Cycle detected in diagram at node: ${cycleNode}`);
             telemetry.sendTelemetryErrorEvent("diagramCycleDetected");
+            return true;
         }
+
+        return false;
     }
 
     private detectCyclicSubgraph(): string | undefined {
