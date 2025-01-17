@@ -29,31 +29,34 @@ export class MermaidCycleDetector {
         const ancestorSubgraphs: Subgraph[] = [];
 
         for (let i = 0; i < lines.length; i++) {
-            let line = lines[i];
-            line = line.trim();
+            const line = lines[i].trim();
 
-            if (line.startsWith("subgraph")) {
+            if (line === "") {
+                continue;
+            } else if (line.startsWith("subgraph")) {
                 const rest = line.substring("subgraph".length, line.length);
                 const subgraphName = rest.split("[")[0].trim();
 
-                if (ancestorSubgraphs.find((subgraph) => subgraph.name === subgraphName)) {
+                if (this.containsSubgraph(ancestorSubgraphs, subgraphName)) {
                     return subgraphName;
                 }
 
                 ancestorSubgraphs.push({ name: subgraphName, line: i });
             } else if (line.startsWith("end")) {
                 ancestorSubgraphs.pop();
-            } else if (line === "") {
-                continue;
             } else {
-                const node = line.split("[")[0];
+                const nodeName = line.split("[")[0];
 
-                if (ancestorSubgraphs.find((subgraph) => subgraph.name === node)) {
-                    return node;
+                if (this.containsSubgraph(ancestorSubgraphs, nodeName)) {
+                    return nodeName;
                 }
             }
         }
 
         return undefined;
+    }
+
+    private containsSubgraph(subgraphs: Subgraph[], subgraphName: string): Subgraph | undefined {
+        return subgraphs.find((subgraph) => subgraph.name === subgraphName);
     }
 }
