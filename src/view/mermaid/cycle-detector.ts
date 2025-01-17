@@ -1,5 +1,10 @@
 import { telemetry } from "../../telemetry";
 
+interface Subgraph {
+    name: string;
+    line: number;
+}
+
 export class MermaidCycleDetector {
     private readonly mermaidCode: string;
 
@@ -21,28 +26,29 @@ export class MermaidCycleDetector {
 
     private detectCyclicSubgraph(): string | undefined {
         const lines = this.mermaidCode.split("\n");
-        const ancestorNodes: string[] = [];
+        const ancestorSubgraphs: Subgraph[] = [];
 
-        for (let line of lines) {
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i];
             line = line.trim();
 
             if (line.startsWith("subgraph")) {
                 const rest = line.substring("subgraph".length, line.length);
                 const subgraphName = rest.split("[")[0].trim();
 
-                if (ancestorNodes.includes(subgraphName)) {
+                if (ancestorSubgraphs.find((subgraph) => subgraph.name === subgraphName)) {
                     return subgraphName;
                 }
 
-                ancestorNodes.push(subgraphName);
+                ancestorSubgraphs.push({ name: subgraphName, line: i });
             } else if (line.startsWith("end")) {
-                ancestorNodes.pop();
+                ancestorSubgraphs.pop();
             } else if (line === "") {
                 continue;
             } else {
                 const node = line.split("[")[0];
 
-                if (ancestorNodes.includes(node)) {
+                if (ancestorSubgraphs.find((subgraph) => subgraph.name === node)) {
                     return node;
                 }
             }
