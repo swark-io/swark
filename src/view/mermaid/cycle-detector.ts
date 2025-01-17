@@ -13,10 +13,10 @@ export class MermaidCycleDetector {
     }
 
     public detectCycle(): boolean {
-        const cycleNode = this.detectCyclicSubgraph();
+        const cycleSubgraph = this.detectCyclicSubgraph();
 
-        if (cycleNode) {
-            console.log(`Cycle detected in diagram at node: ${cycleNode}`);
+        if (cycleSubgraph) {
+            console.log(`Cycle detected in diagram at subgraph: ${cycleSubgraph.name}`);
             telemetry.sendTelemetryErrorEvent("diagramCycleDetected");
             return true;
         }
@@ -24,7 +24,7 @@ export class MermaidCycleDetector {
         return false;
     }
 
-    private detectCyclicSubgraph(): string | undefined {
+    private detectCyclicSubgraph(): Subgraph | undefined {
         const lines = this.mermaidCode.split("\n");
         const ancestorSubgraphs: Subgraph[] = [];
 
@@ -37,8 +37,9 @@ export class MermaidCycleDetector {
                 const rest = line.substring("subgraph".length, line.length);
                 const subgraphName = rest.split("[")[0].trim();
 
-                if (this.containsSubgraph(ancestorSubgraphs, subgraphName)) {
-                    return subgraphName;
+                const ancestorSubgraph = this.containsSubgraph(ancestorSubgraphs, subgraphName);
+                if (ancestorSubgraph) {
+                    return ancestorSubgraph;
                 }
 
                 ancestorSubgraphs.push({ name: subgraphName, line: i });
@@ -47,8 +48,9 @@ export class MermaidCycleDetector {
             } else {
                 const nodeName = line.split("[")[0];
 
-                if (this.containsSubgraph(ancestorSubgraphs, nodeName)) {
-                    return nodeName;
+                const ancestorSubgraph = this.containsSubgraph(ancestorSubgraphs, nodeName);
+                if (ancestorSubgraph) {
+                    return ancestorSubgraph;
                 }
             }
         }
