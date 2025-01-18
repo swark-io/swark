@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   N/A
+-   Added automatic Mermaid cycle fix capability to prevent diagram rendering issues. ([#7](https://github.com/swark-io/swark/issues/7))
 
 ### Changed
 
