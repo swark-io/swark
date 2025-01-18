@@ -11,7 +11,7 @@ export class OutputFormatter {
         const fixedMermaidCode = this.fixCycles(mermaidCode);
         if (fixedMermaidCode) {
             mermaidCode = fixedMermaidCode;
-            mermaidBlock = "```mermaid\n" + fixedMermaidCode + "```";
+            mermaidBlock = "```mermaid\n" + fixedMermaidCode + "\n```";
         }
 
         const linkGenerator = new MermaidLinkGenerator(mermaidCode);
@@ -61,7 +61,7 @@ ${mermaidBlock}`;
             if (fixedMermaidCode) {
                 const subgraphNames = Array.from(cycles.values()).map((subgraph) => subgraph.name);
                 vscode.window.showInformationMessage(
-                    `Detected and fixed cycles in the generated diagram that would cause rendering failure. Renamed subgraphs: ${subgraphNames}`
+                    `Detected and fixed cycles in the generated diagram that would cause rendering failure. Subgraphs renamed: ${subgraphNames}`
                 );
 
                 const numCyclesInFixedCode = this.getNumCycles(fixedMermaidCode);
