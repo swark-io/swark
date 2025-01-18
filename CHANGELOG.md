@@ -5,12 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/swark-io/swark/compare/v1.3.10...main)
+## [Unreleased](https://github.com/swark-io/swark/compare/v1.4.0...main)
 
 ### Added
 
--   Added automatic Mermaid cycle fix capability to prevent diagram rendering issues. ([#7](https://github.com/swark-io/swark/issues/7))
--   Added link to change the configured language model in Swark's output.
+-   N/A
 
 ### Changed
 
@@ -19,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 -   N/A
+
+## [1.4.0](https://github.com/swark-io/swark/compare/v1.3.10...v1.4.0) - 2025-01-18
+
+### Added
+
+-   Added automatic Mermaid cycle fix capability to prevent diagram rendering issues. ([#7](https://github.com/swark-io/swark/issues/7))
+-   Added link to change the configured language model in Swark's output.
 
 ## [1.3.10](https://github.com/swark-io/swark/compare/v1.3.9...v1.3.10) - 2025-01-14
 
