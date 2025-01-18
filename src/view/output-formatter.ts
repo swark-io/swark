@@ -21,14 +21,14 @@ export class OutputFormatter {
 </p>\n
 ## Architecture Diagram
 
-To render this diagram (Mermaid Syntax), you can:
-* Install the [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension in VS Code, or
-* Use the links below to open it in Mermaid Live Editor.
+To render this diagram (Mermaid syntax), you can:
+-   Use the links below to open it in Mermaid Live Editor, or
+-   Install the [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension.
 
 For any issues or feature requests, please visit our [GitHub repository](https://github.com/swark-io/swark) or email us at contact@swark.io.
 
 ## Generated Content
-**Model**: ${modelName}  
+**Model**: ${modelName} - [Change Model](vscode://settings/swark.languageModel)  
 **Mermaid Live Editor**: [View](${linkGenerator.createViewLink()}) | [Edit](${linkGenerator.createEditLink()})
 
 ${mermaidBlock}`;
