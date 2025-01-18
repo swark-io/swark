@@ -12,17 +12,26 @@ export class MermaidCycleDetector {
         this.mermaidCode = mermaidCode;
     }
 
-    public detectCycles(): Map<number, Subgraph> | undefined {
-        const cyclicSubgraphs = this.detectCyclicSubgraphs();
+    public detectCycles(): Map<number, Subgraph> | null {
+        try {
+            const cyclicSubgraphs = this.detectCyclicSubgraphs();
 
-        if (cyclicSubgraphs.size > 0) {
-            const subgraphsNames = Array.from(cyclicSubgraphs.values()).map((subgraph) => subgraph.name);
-            console.log(`Cycles detected in diagram at subgraphs: ${subgraphsNames}`);
-            telemetry.sendTelemetryErrorEvent("diagramCycleDetected", {}, { numCycles: cyclicSubgraphs.size });
-            return cyclicSubgraphs;
+            if (cyclicSubgraphs.size > 0) {
+                const subgraphsNames = Array.from(cyclicSubgraphs.values()).map((subgraph) => subgraph.name);
+                console.log(`Cycles detected in diagram at subgraphs: ${subgraphsNames}`);
+                telemetry.sendTelemetryErrorEvent("diagramCycleDetected", {}, { numCycles: cyclicSubgraphs.size });
+                return cyclicSubgraphs;
+            }
+        } catch (error) {
+            let properties = {};
+            if (error instanceof Error) {
+                properties = { error: error.name, message: error.message };
+            }
+
+            telemetry.sendTelemetryErrorEvent("diagramCycleDetectionFailed", properties);
         }
 
-        return undefined;
+        return null;
     }
 
     private detectCyclicSubgraphs(): Map<number, Subgraph> {
@@ -76,24 +85,34 @@ export class MermaidCycleDetector {
         }
     }
 
-    public fixCycles(subgraphs: Map<number, Subgraph>): string {
-        const lines = this.mermaidCode.split("\n");
+    public fixCycles(subgraphs: Map<number, Subgraph>): string | null {
+        try {
+            const lines = this.mermaidCode.split("\n");
 
-        for (const subgraph of subgraphs.values()) {
-            const cyclicLine = lines[subgraph.line];
+            for (const subgraph of subgraphs.values()) {
+                const cyclicLine = lines[subgraph.line];
 
-            const [beforeSubgraph, afterSubgraph] = cyclicLine.split("subgraph", 2);
-            let [subgraphName, afterBracket] = afterSubgraph.split("[");
-            subgraphName = subgraphName.trim();
+                const [beforeSubgraph, afterSubgraph] = cyclicLine.split("subgraph", 2);
+                let [subgraphName, afterBracket] = afterSubgraph.split("[");
+                subgraphName = subgraphName.trim();
 
-            if (subgraphName !== subgraph.name) {
-                throw new Error(`Expected "${subgraph.name}" but found "${subgraphName}"`);
+                if (subgraphName !== subgraph.name) {
+                    throw new Error(`Expected "${subgraph.name}" but found "${subgraphName}"`);
+                }
+
+                lines[subgraph.line] = this.fixSubgraphLine(subgraphName, beforeSubgraph, afterBracket);
             }
 
-            lines[subgraph.line] = this.fixSubgraphLine(subgraphName, beforeSubgraph, afterBracket);
-        }
+            return lines.join("\n");
+        } catch (error) {
+            let properties = {};
+            if (error instanceof Error) {
+                properties = { error: error.name, message: error.message };
+            }
 
-        return lines.join("\n");
+            telemetry.sendTelemetryErrorEvent("diagramCycleFixFailed", properties);
+            return null;
+        }
     }
 
     private fixSubgraphLine(subgraphName: string, beforeSubgraph: string, afterBracket: string): string {

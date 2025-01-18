@@ -8,14 +8,10 @@ export class OutputFormatter {
         let mermaidBlock = this.getMermaidBlock(llmResponse);
         let mermaidCode = mermaidBlock.replace(/```mermaid|```/g, "");
 
-        const cycleDetector = new MermaidCycleDetector(mermaidCode);
-        const cycles = cycleDetector.detectCycles();
-
-        if (cycles) {
-            // check setting
-            // add info message
-            mermaidCode = cycleDetector.fixCycles(cycles);
-            mermaidBlock = "```mermaid\n" + mermaidCode + "```";
+        const fixedMermaidCode = this.fixCycles(mermaidCode);
+        if (fixedMermaidCode) {
+            mermaidCode = fixedMermaidCode;
+            mermaidBlock = "```mermaid\n" + fixedMermaidCode + "```";
         }
 
         const linkGenerator = new MermaidLinkGenerator(mermaidCode);
@@ -52,6 +48,40 @@ ${mermaidBlock}`;
         }
 
         return block;
+    }
+
+    private static fixCycles(mermaidCode: string): string | null {
+        const cycleDetector = new MermaidCycleDetector(mermaidCode);
+        const cycles = cycleDetector.detectCycles();
+        const isCycleFixEnabled = vscode.workspace.getConfiguration("swark").get<number>("fixMermaidCycles");
+
+        if (cycles && isCycleFixEnabled) {
+            const fixedMermaidCode = cycleDetector.fixCycles(cycles);
+
+            if (fixedMermaidCode) {
+                const subgraphNames = Array.from(cycles.values()).map((subgraph) => subgraph.name);
+                vscode.window.showInformationMessage(
+                    `Detected and fixed cycles in the generated diagram that would cause rendering failure. Renamed subgraphs: ${subgraphNames}`
+                );
+
+                const numCyclesInFixedCode = this.getNumCycles(fixedMermaidCode);
+                telemetry.sendTelemetryEvent(
+                    "diagramCycleFixSucceeded",
+                    {},
+                    { numCycles: cycles.size, numCyclesInFixedCode }
+                );
+
+                return fixedMermaidCode;
+            }
+        }
+
+        return null;
+    }
+
+    private static getNumCycles(mermaidCode: string): number {
+        const cycleDetector = new MermaidCycleDetector(mermaidCode);
+        const cycles = cycleDetector.detectCycles();
+        return cycles ? cycles.size : 0;
     }
 
     public static getLogFileContent(

@@ -74,7 +74,7 @@ suite("MermaidCycleDetector Test Suite", () => {
         });
     });
 
-    function assertCyclesEqual(actualCycles: Map<number, Subgraph> | undefined, expectedCycles: Subgraph[]): void {
+    function assertCyclesEqual(actualCycles: Map<number, Subgraph> | null, expectedCycles: Subgraph[]): void {
         if (!actualCycles) {
             assert.fail("Cycles not detected");
         }
