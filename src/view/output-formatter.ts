@@ -5,10 +5,19 @@ import { MermaidCycleDetector } from "./mermaid/cycle-detector";
 
 export class OutputFormatter {
     public static getDiagramFileContent(modelName: string, llmResponse: string): string {
-        const mermaidBlock = this.getMermaidBlock(llmResponse);
-        const mermaidCode = mermaidBlock.replace(/```mermaid|```/g, "");
+        let mermaidBlock = this.getMermaidBlock(llmResponse);
+        let mermaidCode = mermaidBlock.replace(/```mermaid|```/g, "");
+
         const cycleDetector = new MermaidCycleDetector(mermaidCode);
-        cycleDetector.detectCycle();
+        const cycles = cycleDetector.detectCycles();
+
+        if (cycles) {
+            // check setting
+            // add info message
+            mermaidCode = cycleDetector.fixCycles(cycles);
+            mermaidBlock = "```mermaid\n" + mermaidCode + "```";
+        }
+
         const linkGenerator = new MermaidLinkGenerator(mermaidCode);
 
         return `<p align="center">
