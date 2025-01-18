@@ -102,6 +102,11 @@
                         "Claude 3.5 Sonnet",
                         "OpenAI o1"
                     ]
+                },
+                "swark.fixMermaidCycles": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Automatically fix cycles in the generated Mermaid diagram to prevent rendering failures."
                 }
             }
         },

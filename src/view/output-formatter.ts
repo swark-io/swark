@@ -1,12 +1,19 @@
 import * as vscode from "vscode";
 import { MermaidLinkGenerator } from "./mermaid/link-generator";
 import { telemetry } from "../telemetry";
+import { MermaidCycleDetector } from "./mermaid/cycle-detector";
 
 export class OutputFormatter {
     public static getDiagramFileContent(modelName: string, llmResponse: string): string {
-        const mermaidBlock = this.getMermaidBlock(llmResponse);
-        const mermaidCode = mermaidBlock.replace(/```mermaid|```/g, "");
-        this.tryDetectCycle(mermaidCode);
+        let mermaidBlock = this.getMermaidBlock(llmResponse);
+        let mermaidCode = mermaidBlock.replace(/```mermaid|```/g, "");
+
+        const fixedMermaidCode = this.fixCycles(mermaidCode);
+        if (fixedMermaidCode) {
+            mermaidCode = fixedMermaidCode;
+            mermaidBlock = "```mermaid\n" + fixedMermaidCode + "\n```";
+        }
+
         const linkGenerator = new MermaidLinkGenerator(mermaidCode);
 
         return `<p align="center">
@@ -43,49 +50,38 @@ ${mermaidBlock}`;
         return block;
     }
 
-    public static tryDetectCycle(mermaidCode: string): void {
-        try {
-            const cycleNode = this.detectCycle(mermaidCode);
+    private static fixCycles(mermaidCode: string): string | null {
+        const cycleDetector = new MermaidCycleDetector(mermaidCode);
+        const cycles = cycleDetector.detectCycles();
+        const isCycleFixEnabled = vscode.workspace.getConfiguration("swark").get<number>("fixMermaidCycles");
 
-            if (cycleNode) {
-                console.log(`Cycle detected in the diagram at node: ${cycleNode}`);
-                telemetry.sendTelemetryErrorEvent("diagramCycleDetected");
+        if (cycles && isCycleFixEnabled) {
+            const fixedMermaidCode = cycleDetector.fixCycles(cycles);
+
+            if (fixedMermaidCode) {
+                const subgraphNames = Array.from(cycles.values()).map((subgraph) => subgraph.name);
+                vscode.window.showInformationMessage(
+                    `Detected and fixed cycles in the generated diagram that would cause rendering failure. Subgraphs renamed: ${subgraphNames}`
+                );
+
+                const numCyclesInFixedCode = this.getNumCycles(fixedMermaidCode);
+                telemetry.sendTelemetryEvent(
+                    "diagramCycleFixSucceeded",
+                    {},
+                    { numCycles: cycles.size, numCyclesInFixedCode }
+                );
+
+                return fixedMermaidCode;
             }
-        } catch (error) {
-            telemetry.sendTelemetryErrorEvent("diagramCycleDetectionFailed");
         }
+
+        return null;
     }
 
-    public static detectCycle(mermaidCode: string): string | undefined {
-        const lines = mermaidCode.split("\n");
-        const parentNodes: string[] = [];
-
-        for (let line of lines) {
-            line = line.trim();
-
-            if (line.startsWith("subgraph")) {
-                const rest = line.substring("subgraph".length, line.length);
-                const subgraphName = rest.split("[")[0].trim();
-
-                if (parentNodes.includes(subgraphName)) {
-                    return subgraphName;
-                }
-
-                parentNodes.push(subgraphName);
-            } else if (line.startsWith("end")) {
-                parentNodes.pop();
-            } else if (line === "") {
-                continue;
-            } else {
-                const node = line.split("[")[0];
-
-                if (parentNodes.includes(node)) {
-                    return node;
-                }
-            }
-        }
-
-        return undefined;
+    private static getNumCycles(mermaidCode: string): number {
+        const cycleDetector = new MermaidCycleDetector(mermaidCode);
+        const cycles = cycleDetector.detectCycles();
+        return cycles ? cycles.size : 0;
     }
 
     public static getLogFileContent(
