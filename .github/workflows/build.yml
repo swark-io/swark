@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build
 
 on:
     push:
@@ -8,13 +8,17 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                os: [macos-latest, ubuntu-latest, windows-latest]
+
+        runs-on: ${{ matrix.os }}
 
         steps:
-            - name: Checkout code
+            - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Setup Node.js
+            - name: Install Node.js
               uses: actions/setup-node@v4
               with:
                   node-version: "20.x"
@@ -25,5 +29,10 @@ jobs:
             - name: Build
               run: npm run compile
 
-            - name: Run tests
+            - name: Run tests (ubuntu)
+              run: xvfb-run -a npm test
+              if: runner.os == 'Linux'
+
+            - name: Run tests (macos, windows)
               run: npm test
+              if: runner.os != 'Linux'
