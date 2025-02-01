@@ -17,15 +17,20 @@ export class OutputFormatter {
         const linkGenerator = new MermaidLinkGenerator(mermaidCode);
 
         return `<p align="center">
-<img src="https://raw.githubusercontent.com/swark-io/swark/refs/heads/main/assets/logo/swark-logo-dark-mode.png" width="10%" />
-</p>\n
-## Architecture Diagram
+    <a href="https://swark.io">
+        <img src="https://raw.githubusercontent.com/swark-io/swark/refs/heads/main/assets/logo/swark-logo-dark-mode.png" width="10%" />
+    </a>
+</p>
+<p align="center">
+    <b>Automatic Architecture Diagrams from Code</b><br />
+    <a href="https://github.com/swark-io/swark">GitHub</a> • <a href="https://swark.io">Website</a> • <a href="mailto:contact@swark.io">Contact Us</a>
+</p>
 
-To render this diagram (Mermaid syntax), you can:
--   Use the links below to open it in Mermaid Live Editor, or
--   Install the [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension.
+## Usage Instructions
 
-For any issues or feature requests, please visit our [GitHub repository](https://github.com/swark-io/swark) or email us at contact@swark.io.
+1. **Render the Diagram**: Use the links below to open it in Mermaid Live Editor, or install the [Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) extension.
+2. **Recommended Model**: If available for you, use \`claude-3.5-sonnet\` [language model](vscode://settings/swark.languageModel). It can process more files and generates better diagrams.
+3. **Iterate for Best Results**: Language models are non-deterministic. Generate the diagram multiple times and choose the best result.
 
 ## Generated Content
 **Model**: ${modelName} - [Change Model](vscode://settings/swark.languageModel)  
