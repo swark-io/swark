@@ -38,7 +38,13 @@ git checkout -b feature-name
 
 5. Test the extension in VS Code using `F5`
 
-6. Push the new branch and proceed to submit a pull request:
+6. Run tests:
+
+```bash
+npm test
+```
+
+7. Push the new branch and proceed to submit a pull request:
 
 ```bash
 git push
