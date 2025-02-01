@@ -72,7 +72,9 @@
                         "scala",
                         "swift",
                         "kt",
-                        "kts"
+                        "kts",
+                        "lua",
+                        "dart"
                     ],
                     "description": "List of file extensions to include in search."
                 },
