@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   N/A
+-   Support `lua` and `dart` programming languages.
+-   Support Gemini 2.0 Flash language model.
 
 ### Changed
 

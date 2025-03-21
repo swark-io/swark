@@ -98,13 +98,15 @@
                         "gpt-4o",
                         "claude-3.5-sonnet",
                         "o1-ga",
-                        "o3-mini"
+                        "o3-mini",
+                        "gemini-2.0-flash"
                     ],
                     "enumDescriptions": [
                         "GPT 4o",
                         "Claude 3.5 Sonnet",
                         "OpenAI o1",
-                        "OpenAI o3-mini"
+                        "OpenAI o3-mini",
+                        "Gemini 2.0 Flash"
                     ]
                 },
                 "swark.fixMermaidCycles": {
